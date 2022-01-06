@@ -27,35 +27,66 @@ class StoryTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                  child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Stack(
-                  children: [
-                    Positioned.fill(child: _buildImageWidget()),
-                    Positioned(
-                      top: 10,
-                      right: 10,
-                      child: InkWell(
-                        onTap: onFavoriteTap,
-                        child: Icon(
-                          isFavorited ? Icons.favorite : Icons.favorite_border,
-                          key: ValueKey(isFavorited),
-                          color: isFavorited ? Colors.red : Colors.white,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 4.0, // soften the shadow
+                        spreadRadius: 1.0, //extend the shadow
+                        offset: Offset(
+                          2.0, // Move to right 10  horizontally
+                          2.0, // Move to bottom 10 Vertically
                         ),
-                      ),
+                      )
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(child: _buildImageWidget()),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: InkWell(
+                            onTap: onFavoriteTap,
+                            child: Icon(
+                              isFavorited
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              key: ValueKey(isFavorited),
+                              color: isFavorited ? Colors.red : Colors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          child: Container(
+                            constraints: const BoxConstraints(
+                                minWidth: 100, maxWidth: 150),
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10.0)),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: AutoSizeText(
+                                story.title,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                minFontSize: 14,
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.black87),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )),
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: AutoSizeText(
-                  story.title,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  minFontSize: 14,
-                  style: const TextStyle(
-                    fontSize: 14,
                   ),
                 ),
               ),
@@ -65,9 +96,12 @@ class StoryTile extends StatelessWidget {
       );
 
   Widget _buildImageWidget() => story.thumbnailImageUrl != null
-      ? CachedNetworkImage(
-          imageUrl: MediaFormat.getAbsoluteUrl(story.thumbnailImageUrl) ?? '',
-          fit: BoxFit.cover,
+      ? Hero(
+          tag: '${story.id}',
+          child: CachedNetworkImage(
+            imageUrl: MediaFormat.getAbsoluteUrl(story.thumbnailImageUrl) ?? '',
+            fit: BoxFit.cover,
+          ),
         )
       : Container(color: Colors.grey);
 }

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -5,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_challenge/config.dart';
 import 'package:flutter_challenge/data/api.dart';
-import 'package:flutter_challenge/widgets/story_tile.dart';
-import 'package:flutter_challenge/widgets/badge.dart';
 import 'package:flutter_challenge/pages/story_page.dart';
+import 'package:flutter_challenge/providers/favourite_story.dart';
+import 'package:flutter_challenge/widgets/badge.dart';
+import 'package:flutter_challenge/widgets/story_tile.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'dart:math' as math;
+import 'package:provider/provider.dart';
+
+import 'favourite_stories_page.dart';
 
 class StoriesPage extends StatefulWidget {
   const StoriesPage({Key? key}) : super(key: key);
@@ -40,14 +45,14 @@ class _StoriesPageState extends State<StoriesPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.grey[900],
         body: CustomScrollView(slivers: [
           SliverAppBar(
             automaticallyImplyLeading: false,
             snap: false,
             pinned: true,
             floating: false,
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.grey[900],
             expandedHeight: 80,
             flexibleSpace: FlexibleSpaceBar(
               title: Row(
@@ -85,7 +90,25 @@ class _StoriesPageState extends State<StoriesPage> {
                   child: StoryTile(
                     key: ValueKey(story.id),
                     story: story,
-                    isFavorited: false,
+                    isFavorited:
+                        (Provider.of<FavouriteStory>(context, listen: true)
+                                .favouriteStories
+                                .where((favouriteStory) =>
+                                    favouriteStory.id == story.id)
+                                .isEmpty)
+                            ? false
+                            : true,
+                    onFavoriteTap: () {
+                      (Provider.of<FavouriteStory>(context, listen: false)
+                              .favouriteStories
+                              .where((favouriteStory) =>
+                                  favouriteStory.id == story.id)
+                              .isEmpty)
+                          ? Provider.of<FavouriteStory>(context, listen: false)
+                              .addToFavourite(story)
+                          : Provider.of<FavouriteStory>(context, listen: false)
+                              .removeFromFavourite(story);
+                    },
                     onTap: () {
                       Navigator.push(
                         context,
@@ -106,9 +129,15 @@ class _StoriesPageState extends State<StoriesPage> {
           )
         ]),
         floatingActionButton: Badge(
-          value: '0',
+          value: Provider.of<FavouriteStory>(context, listen: true)
+              .favouriteStoryCount
+              .toString(),
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const FavouriteStoriesPage(),
+              ));
+            },
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             child: const Icon(

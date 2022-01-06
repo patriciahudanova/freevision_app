@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_challenge/pages/home_page.dart';
+import 'package:flutter_challenge/providers/favourite_story.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,16 +14,22 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({Key? key})
+      : super(
+          key: key,
+        );
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'freevision stories',
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          primarySwatch: Colors.grey,
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (context) => FavouriteStory(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'freevision stories',
+          theme: ThemeData(
+            brightness: Brightness.dark,
+            primarySwatch: Colors.grey,
+          ),
+          home: const HomePage(),
         ),
-        home: const HomePage(),
       );
 }

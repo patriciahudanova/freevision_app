@@ -22,13 +22,17 @@ class StoryPage extends StatelessWidget {
               ),
             ),
             if (story.largestImageUrl != null) ...[
-              KenBurns(
-                maxScale: 1.3,
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: MediaFormat.getAbsoluteUrl(story.largestImageUrl)!,
+              Hero(
+                tag: '${story.id}',
+                child: KenBurns(
+                  maxScale: 1.3,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl:
+                        MediaFormat.getAbsoluteUrl(story.largestImageUrl)!,
+                  ),
                 ),
-              )
+              ),
             ],
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -40,16 +44,17 @@ class StoryPage extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: <Color>[
-                                Colors.black.withOpacity(0.0),
-                                Colors.black.withOpacity(0.7),
-                              ],
-                              stops: const [
-                                0.0,
-                                1.0,
-                              ]),
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: <Color>[
+                              Colors.black.withOpacity(0.0),
+                              Colors.black.withOpacity(0.7),
+                            ],
+                            stops: const [
+                              0.0,
+                              1.0,
+                            ],
+                          ),
                         ),
                         child: SafeArea(
                           child: Padding(
