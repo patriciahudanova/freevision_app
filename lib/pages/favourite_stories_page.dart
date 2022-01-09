@@ -3,9 +3,11 @@ import 'dart:math' as math;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_challenge/data/api.dart';
 import 'package:flutter_challenge/pages/story_page.dart';
 import 'package:flutter_challenge/providers/favourite_story.dart';
 import 'package:flutter_challenge/widgets/story_tile.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
@@ -56,40 +58,22 @@ class _FavouriteStoriesPageState extends State<FavouriteStoriesPage> {
             crossAxisSpacing: 10,
             itemCount: _favouriteStories.length,
             itemBuilder: (context, index) {
-              var story = _favouriteStories[index];
-
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                transitionBuilder: (child, animation) => ScaleTransition(
-                  scale: animation,
-                  child: child,
-                ),
-                child: StoryTile(
-                  key: ValueKey(story.id),
-                  story: story,
-                  isFavorited:
-                      Provider.of<FavouriteStory>(context, listen: true)
-                              .favouriteStories
-                              .contains(story)
-                          ? true
-                          : false,
-                  onFavoriteTap: () {
-                    Provider.of<FavouriteStory>(context, listen: false)
-                            .favouriteStories
-                            .contains(story)
-                        ? Provider.of<FavouriteStory>(context, listen: false)
-                            .removeFromFavourite(story)
-                        : Provider.of<FavouriteStory>(context, listen: false)
-                            .addToFavourite(story);
-                  },
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StoryPage(story: story),
-                      ),
-                    );
-                  },
+              final story = _favouriteStories[index];
+              return AnimationConfiguration.staggeredGrid(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                columnCount: 2,
+                child: SlideAnimation(
+                  // return AnimatedSwitcher(
+                  //   duration: const Duration(milliseconds: 200),
+                  //   transitionBuilder: (child, animation) => ScaleTransition(
+                  //     scale: animation,
+                  //     child: child,
+                  //   ),
+                  child: _Tile(
+                    key: ValueKey(story.id),
+                    story: story,
+                  ),
                 ),
               );
             },
@@ -101,6 +85,41 @@ class _FavouriteStoriesPageState extends State<FavouriteStoriesPage> {
           ),
         )
       ]),
+    );
+  }
+}
+
+class _Tile extends StatelessWidget {
+  final Story story;
+  const _Tile({Key? key, required this.story}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StoryTile(
+      story: story,
+      isHero: false,
+      isFavorited: Provider.of<FavouriteStory>(context, listen: true)
+              .favouriteStories
+              .contains(story)
+          ? true
+          : false,
+      onFavoriteTap: () {
+        Provider.of<FavouriteStory>(context, listen: false)
+                .favouriteStories
+                .contains(story)
+            ? Provider.of<FavouriteStory>(context, listen: false)
+                .removeFromFavourite(story)
+            : Provider.of<FavouriteStory>(context, listen: false)
+                .addToFavourite(story);
+      },
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StoryPage(story: story),
+          ),
+        );
+      },
     );
   }
 }

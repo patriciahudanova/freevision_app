@@ -51,9 +51,10 @@ dependencies:
   provider: ^6.0.1
   rect_getter: ^1.1.0
   rive: ^0.7.33
-
+  octo_image: ^1.0.1
   retrofit: any
   logger: any
+  flutter_staggered_animations: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,8 @@ flutter:
   assets:
     - assets/freevision-logo.png
     - assets/dog_phone.riv
+    - assets/hearth_icon.riv
+    - assets/hearth_icon_unlike.riv
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
