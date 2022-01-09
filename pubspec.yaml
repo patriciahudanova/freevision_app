@@ -55,6 +55,7 @@ dependencies:
   retrofit: any
   logger: any
   flutter_staggered_animations: ^1.0.0
+  tuple: ^2.0.0
 
 dev_dependencies:
   flutter_test:

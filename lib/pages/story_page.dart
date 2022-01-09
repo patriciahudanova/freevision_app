@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_challenge/data/api.dart';
 import 'package:kenburns/kenburns.dart';
 import 'package:octo_image/octo_image.dart';
@@ -15,8 +12,6 @@ class StoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rnd = Random();
-
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -91,19 +86,5 @@ class StoryPage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class SpringCurve extends Curve {
-  const SpringCurve({
-    this.a = 0.15,
-    this.w = 19.4,
-  });
-  final double a;
-  final double w;
-
-  @override
-  double transformInternal(double t) {
-    return -(pow(e, -t / a) * cos(t * w)) + 1;
   }
 }
