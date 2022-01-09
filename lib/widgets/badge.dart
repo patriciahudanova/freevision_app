@@ -27,7 +27,7 @@ class Badge extends StatelessWidget {
             right: right,
             top: top,
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 200),
               transitionBuilder: (child, animation) => ScaleTransition(
                 scale: animation,
                 child: child,
